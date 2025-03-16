@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Example</title>
+    <style>
+        /* Basic page styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Main content area */
+        #content {
+            display: none; /* Hidden initially */
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        /* Loading overlay */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        /* Spinner animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading overlay -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Waking up server, please wait...</div>
+    </div>
+
+    <!-- Main content -->
+    <div id="content">
+        <h1>Welcome to my website!</h1>
+        <p>Your content is now loaded and ready.</p>
+    </div>
+
+    <script>
+        // Simulate content loading (replace this with your actual initialization logic)
+        window.addEventListener('DOMContentLoaded', function() {
+            // This function shows the loading spinner immediately
+            showLoading();
+            
+            // Your initialization code goes here
+            // For example, fetching data from your server
+            initializeApplication();
+        });
+
+        function showLoading() {
+            document.getElementById('loading-overlay').style.display = 'flex';
+            document.getElementById('content').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading-overlay').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+        }
+
+        function initializeApplication() {
+            // This is where you would put your actual initialization code
+            // For example, an API request to your server to "wake it up"
+
+            // For demonstration, we'll use a timeout to simulate a server request
+            fetch('https://one-2-3-game.onrender.com/')
+                .then(response => response.json())
+                .then(data => {
+                    // Process your data here
+                    console.log('Server is awake and responded with data');
+                    hideLoading();
+                })
+                .catch(error => {
+                    // If there's an error, we still want to retry or at least hide the spinner eventually
+                    console.error('Error connecting to server:', error);
+                    
+                    // Optional: Show an error message
+                    document.querySelector('.loading-text').textContent = 'Taking longer than expected... still trying';
+                    
+                    // You might want to implement a retry mechanism here
+                    setTimeout(hideLoading, 10000); // Hide after 10 seconds anyway
+                });
+        }
+    </script>
+</body>
+</html>
