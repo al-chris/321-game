@@ -95,25 +95,19 @@
         }
 
         function initializeApplication() {
-            // This is where you would put your actual initialization code
-            // For example, an API request to your server to "wake it up"
-
-            // For demonstration, we'll use a timeout to simulate a server request
-            fetch('https://one-2-3-game.onrender.com/')
+            fetch('https://one-2-3-game.onrender.com/alive')
                 .then(response => response.json())
                 .then(data => {
-                    // Process your data here
-                    console.log('Server is awake and responded with data');
-                    hideLoading();
+                    if (data.status === true) {
+                        // Redirect the user to another site
+                        window.location.href = 'https://one-2-3-game.onrender.com'; // Replace with the actual URL
+                    } else {
+                        hideLoading();
+                    }
                 })
                 .catch(error => {
-                    // If there's an error, we still want to retry or at least hide the spinner eventually
                     console.error('Error connecting to server:', error);
-                    
-                    // Optional: Show an error message
                     document.querySelector('.loading-text').textContent = 'Taking longer than expected... still trying';
-                    
-                    // You might want to implement a retry mechanism here
                     setTimeout(hideLoading, 10000); // Hide after 10 seconds anyway
                 });
         }
